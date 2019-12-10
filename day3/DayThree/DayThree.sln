@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29509.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayThree", "DayThree\DayThree.csproj", "{20A432DF-73E5-4CA2-BB43-A9546F2876BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrossedWires.Test", "CrossedWires.Test\CrossedWires.Test.csproj", "{3AAA88C8-8D19-43E0-9D55-92F1D32A8980}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{20A432DF-73E5-4CA2-BB43-A9546F2876BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20A432DF-73E5-4CA2-BB43-A9546F2876BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20A432DF-73E5-4CA2-BB43-A9546F2876BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20A432DF-73E5-4CA2-BB43-A9546F2876BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AAA88C8-8D19-43E0-9D55-92F1D32A8980}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AAA88C8-8D19-43E0-9D55-92F1D32A8980}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AAA88C8-8D19-43E0-9D55-92F1D32A8980}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AAA88C8-8D19-43E0-9D55-92F1D32A8980}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D90BBCF1-8190-43E3-8740-55AB07C56E6C}
+	EndGlobalSection
+EndGlobal

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DayTwo
 {
@@ -19,7 +16,6 @@ namespace DayTwo
             int verb = 0;
             int limit = 100;
             int lowest = -1;
-            // 6735 was the first with the noun leading. 
             for(noun = 0; noun <= limit; ++noun) 
             { 
                 for (verb = 0; verb <= limit; ++verb)
