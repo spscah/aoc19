@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29509.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayTwo", "DayTwo\DayTwo.csproj", "{FBC14560-8768-408A-AF99-26B29C827928}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayTwo.Tests", "DayTwo.Tests\DayTwo.Tests.csproj", "{F154F332-FD58-4312-AD03-61EE31B38699}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FBC14560-8768-408A-AF99-26B29C827928}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBC14560-8768-408A-AF99-26B29C827928}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBC14560-8768-408A-AF99-26B29C827928}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBC14560-8768-408A-AF99-26B29C827928}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F154F332-FD58-4312-AD03-61EE31B38699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F154F332-FD58-4312-AD03-61EE31B38699}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F154F332-FD58-4312-AD03-61EE31B38699}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F154F332-FD58-4312-AD03-61EE31B38699}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4AC6B052-B04F-425A-A870-81CCA196E5C9}
+	EndGlobalSection
+EndGlobal
