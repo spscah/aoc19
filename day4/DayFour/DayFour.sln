@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29509.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayFour", "DayFour\DayFour.csproj", "{E84F93A9-B83F-4D86-83B7-3D36A1C79AA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayFour.Tests", "DayFour.Tests\DayFour.Tests.csproj", "{9D127C32-0041-4B4D-8B61-2293AA2BDCF4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E84F93A9-B83F-4D86-83B7-3D36A1C79AA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E84F93A9-B83F-4D86-83B7-3D36A1C79AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E84F93A9-B83F-4D86-83B7-3D36A1C79AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E84F93A9-B83F-4D86-83B7-3D36A1C79AA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D127C32-0041-4B4D-8B61-2293AA2BDCF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D127C32-0041-4B4D-8B61-2293AA2BDCF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D127C32-0041-4B4D-8B61-2293AA2BDCF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D127C32-0041-4B4D-8B61-2293AA2BDCF4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {785A2781-B52D-4C11-82ED-03EF15856220}
+	EndGlobalSection
+EndGlobal
