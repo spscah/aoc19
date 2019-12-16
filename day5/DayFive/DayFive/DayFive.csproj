@@ -43,6 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeMnemonics.cs" />
+    <Compile Include="IntCodeCompiler.cs" />
+    <Compile Include="IntCodeCompilerUtilities.cs" />
+    <Compile Include="Opcode.cs" />
+    <Compile Include="ParameterMode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
