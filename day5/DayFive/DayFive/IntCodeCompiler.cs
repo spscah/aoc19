@@ -23,11 +23,12 @@ namespace DayFive
         readonly string _name;
         readonly bool _useConsoleInput;
         readonly IDictionary<long,long> _sourceCode;
-        
+        readonly Queue<long> _outputQueue;
         long _relativeBaseOffset;
 
         internal CompilerState State => _state;
         public long LastOutput => _lastOutput;
+        public Queue<long> OutputQueue => _outputQueue;
         public IntCodeCompiler(string name, IList<long> code, bool useConsoleInput)
         {
             _name = name;
@@ -38,6 +39,7 @@ namespace DayFive
             for(int i = 0; i < code.Count; ++i)
                 _sourceCode.Add((long)i, code[i]);
             _relativeBaseOffset = 0;
+            _outputQueue = new Queue<long>();
         }
         public IntCodeCompiler(string name, IList<long> code, Queue<long> inputs) : this(name, code, false)
         {
@@ -190,7 +192,9 @@ namespace DayFive
         void Output(long i)
         {
             _lastOutput = i;
-            Console.WriteLine("[{0}]: {1}", _currentinstruction, i);        
+            if(_useConsoleInput)
+                Console.WriteLine("[{0}]: {1}", _currentinstruction, i);
+            _outputQueue.Enqueue(i);
         }
 
         public override string ToString()
