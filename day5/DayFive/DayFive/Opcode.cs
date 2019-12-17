@@ -4,7 +4,7 @@ namespace DayFive
 {
     class Opcode
     {
-        readonly int _value;
+        readonly long _value;
         int _jump;
         readonly CodeMnemonics _code;
         readonly IList<ParameterMode> _modes;
@@ -12,7 +12,7 @@ namespace DayFive
         public IList<ParameterMode> Modes => _modes;
 
         public int Jump => _jump;
-        public Opcode(int o)
+        public Opcode(long o)
         {
             _value = o;
             _code = (CodeMnemonics)(o % 100);
@@ -25,6 +25,7 @@ namespace DayFive
             {
                 case CodeMnemonics.Input:
                 case CodeMnemonics.Output:
+                case CodeMnemonics.RelativeBaseOffset:
                     _jump = 2;
                     break;
                 case CodeMnemonics.JumpIfTrue:

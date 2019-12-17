@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DayFive
 {
@@ -15,93 +16,109 @@ namespace DayFive
     public class IntCodeCompiler
     {       
 
-        readonly Queue<int> _inputs = null;
-        int _lastOutput;
-        int _currentinstruction;
+        readonly Queue<long> _inputs = null;
+        long _lastOutput;
+        long _currentinstruction;
         CompilerState _state;
         readonly string _name;
         readonly bool _useConsoleInput;
-        readonly IList<int> _sourceCode;
+        readonly IDictionary<long,long> _sourceCode;
+        
+        long _relativeBaseOffset;
 
         internal CompilerState State => _state;
-        public int LastOutput => _lastOutput;
-        public IntCodeCompiler(string name, IList<int> code, bool useConsoleInput)
+        public long LastOutput => _lastOutput;
+        public IntCodeCompiler(string name, IList<long> code, bool useConsoleInput)
         {
             _name = name;
             _currentinstruction = 0;
             _state = CompilerState.Initialised;
             _useConsoleInput = useConsoleInput;
-            _sourceCode = code;
+            _sourceCode = new Dictionary<long, long>();
+            for(int i = 0; i < code.Count; ++i)
+                _sourceCode.Add((long)i, code[i]);
+            _relativeBaseOffset = 0;
         }
-        public IntCodeCompiler(string name, IList<int> code, Queue<int> inputs) : this(name, code, false)
+        public IntCodeCompiler(string name, IList<long> code, Queue<long> inputs) : this(name, code, false)
         {
             _inputs = inputs;
         }
 
-        public IntCodeCompiler(IList<int> code, Queue<int> inputs) : this(string.Empty, code, inputs)
+        public IntCodeCompiler(IList<long> code, Queue<long> inputs) : this(string.Empty, code, inputs)
         { }
 
-        public void ProvideInput(int input)
+        public void ProvideInput(long input)
         {
             if (_state != CompilerState.PausedWaitingForInput)
                 throw new InvalidOperationException("not expecting input at this time");
-            Opcode opcode = new Opcode(_sourceCode[_currentinstruction]);
-            int location = _currentinstruction + 1;
+            Opcode opcode = new Opcode(GetAndExtendAsNecessary(_currentinstruction));
+            long location = _currentinstruction + 1;
             if (opcode.Modes[0] == ParameterMode.Position)
-                location = _sourceCode[location];
-            _sourceCode[location] = input;
+                location = GetAndExtendAsNecessary(location);
+            SetAndExtendAsNecessary(location, input);
             _currentinstruction += opcode.Jump;
             _state = CompilerState.Poised;
         }
 
-        public int? Calculate()
+        public long? Calculate()
         {
             if(_state != CompilerState.Poised && _state != CompilerState.Initialised)
                 throw new InvalidOperationException("not expecting to be run at this time");
 
-            while (_sourceCode[_currentinstruction] != 99)
+            while (GetAndExtendAsNecessary(_currentinstruction) != 99)
             {
-                Opcode opcode = new Opcode(_sourceCode[_currentinstruction]);
-                if (opcode.Code == CodeMnemonics.Add||opcode.Code==CodeMnemonics.Multiply || opcode.Code == CodeMnemonics.LessThan || opcode.Code == CodeMnemonics.Equals)
+                Opcode opcode = new Opcode(GetAndExtendAsNecessary(_currentinstruction));                     
+                if (opcode.Code == CodeMnemonics.Add
+                    || opcode.Code==CodeMnemonics.Multiply 
+                    || opcode.Code == CodeMnemonics.LessThan 
+                    || opcode.Code == CodeMnemonics.Equals)
                 {
-                    int a = _sourceCode[_currentinstruction + 1];
+                    long a = GetAndExtendAsNecessary(_currentinstruction + 1);
                     if (opcode.Modes[0] == ParameterMode.Position)
-                        a = _sourceCode[a];
+                        a = GetAndExtendAsNecessary(a);
+                    if (opcode.Modes[0] == ParameterMode.Relative)
+                        a = GetAndExtendAsNecessary(a + _relativeBaseOffset);
 
-                    int b = _sourceCode[_currentinstruction + 2];
+                    long b = GetAndExtendAsNecessary(_currentinstruction + 2);
                     if (opcode.Modes[1] == ParameterMode.Position)
-                        b = _sourceCode[b];
+                        b = GetAndExtendAsNecessary(b);
+                    if (opcode.Modes[1] == ParameterMode.Relative)
+                        b = GetAndExtendAsNecessary(b+_relativeBaseOffset);
 
-                    int location = _currentinstruction + 3;
+                    long location = _currentinstruction + 3;
                     if (opcode.Modes[2] == ParameterMode.Position)
-                        location = _sourceCode[location];
+                        location = GetAndExtendAsNecessary(location);
+                    if (opcode.Modes[2] == ParameterMode.Relative)
+                        location = GetAndExtendAsNecessary(location)+_relativeBaseOffset;
 
                     if (opcode.Code == CodeMnemonics.Add)
-                        _sourceCode[location] = a + b;
+                        SetAndExtendAsNecessary(location, a + b);
                     if (opcode.Code == CodeMnemonics.Multiply)
-                        _sourceCode[location] = a * b;
+                        SetAndExtendAsNecessary(location, a * b);
                     if (opcode.Code == CodeMnemonics.Equals)
                     {
-                        _sourceCode[location] = (a == b) ? 1 : 0;
+                        SetAndExtendAsNecessary(location, (a == b) ? 1 : 0);
                     }
                     if (opcode.Code == CodeMnemonics.LessThan)
                     {
-                        _sourceCode[location] = (a < b) ? 1 : 0;
+                        SetAndExtendAsNecessary(location, (a < b) ? 1 : 0);
                     }
                 }
                 if (opcode.Code == CodeMnemonics.Input)
                 {
-                    int location = _currentinstruction + 1;
+                    long location = _currentinstruction + 1;
                     if (opcode.Modes[0] == ParameterMode.Position)
-                        location = _sourceCode[location];
+                        location = GetAndExtendAsNecessary(location);
+                    if (opcode.Modes[0] == ParameterMode.Relative)
+                        location = GetAndExtendAsNecessary(location)+_relativeBaseOffset;
                     if (_inputs != null && _inputs.Count > 0)
-                        _sourceCode[location] = _inputs.Dequeue();
+                        SetAndExtendAsNecessary(location,  _inputs.Dequeue());
                     else
                     {
                         if (_useConsoleInput)
                         {
                             Console.Write("input > ");
-                            _sourceCode[location] = Convert.ToInt32(Console.ReadLine());
+                            SetAndExtendAsNecessary(location, Convert.ToInt64(Console.ReadLine()));
                         } else
                         {
                             _state = CompilerState.PausedWaitingForInput;
@@ -112,20 +129,27 @@ namespace DayFive
                 }
                 if (opcode.Code == CodeMnemonics.Output)
                 {
-                    int location = _currentinstruction + 1;
+                    long location = _currentinstruction + 1;
                     if (opcode.Modes[0] == ParameterMode.Position)
-                        location = _sourceCode[location];
-                    Output(_sourceCode[location]);
+                        location = GetAndExtendAsNecessary(location);
+                    if (opcode.Modes[0] == ParameterMode.Relative)
+                        location = GetAndExtendAsNecessary(location)+_relativeBaseOffset;
+                    Output(GetAndExtendAsNecessary(location));
 
                 }
                 if(opcode.Code == CodeMnemonics.JumpIfTrue || opcode.Code == CodeMnemonics.JumpIfFalse)
                 {
-                    int testvalue = _sourceCode[_currentinstruction + 1];
+                    long testvalue = GetAndExtendAsNecessary(_currentinstruction + 1);
                     if (opcode.Modes[0] == ParameterMode.Position)
-                        testvalue = _sourceCode[testvalue];
-                    int location = _sourceCode[_currentinstruction + 2];
+                        testvalue = GetAndExtendAsNecessary(testvalue);
+                    if (opcode.Modes[0] == ParameterMode.Relative)
+                        testvalue = GetAndExtendAsNecessary( testvalue +_relativeBaseOffset);
+
+                    long location = GetAndExtendAsNecessary(_currentinstruction + 2);
                     if (opcode.Modes[1] == ParameterMode.Position)
-                        location = _sourceCode[location];
+                        location = GetAndExtendAsNecessary(location);
+                    if (opcode.Modes[1] == ParameterMode.Relative)
+                        location = GetAndExtendAsNecessary(location+_relativeBaseOffset);
 
                     if ((opcode.Code == CodeMnemonics.JumpIfTrue && testvalue > 0) || (opcode.Code == CodeMnemonics.JumpIfFalse && testvalue == 0)) 
                     {
@@ -133,21 +157,45 @@ namespace DayFive
                         opcode.SetJumpToZero();
                     }
                 }
+                if(opcode.Code == CodeMnemonics.RelativeBaseOffset)
+                {
+                    long location = _currentinstruction + 1;
+                    if (opcode.Modes[0] == ParameterMode.Position)
+                        location = GetAndExtendAsNecessary(location);
+                    if (opcode.Modes[0] == ParameterMode.Relative)
+                        location = GetAndExtendAsNecessary(location) + _relativeBaseOffset;
 
+                    _relativeBaseOffset += GetAndExtendAsNecessary(location);
+                }
                 _currentinstruction += opcode.Jump;
             }
             _state = CompilerState.Halted;
-            return _sourceCode[0];
+            return GetAndExtendAsNecessary(0);
         }
-        void Output(int i)
+
+        long GetAndExtendAsNecessary(long i)
+        {
+            if(!_sourceCode.ContainsKey(i))
+                _sourceCode.Add(i, 0);
+            return _sourceCode[i];
+        }
+        void SetAndExtendAsNecessary(long i, long value)
+        {
+            if (_sourceCode.ContainsKey(i))
+                _sourceCode[i] = value;
+            else
+                _sourceCode.Add(i, value);
+        }
+
+        void Output(long i)
         {
             _lastOutput = i;
-            Console.WriteLine(i);        
+            Console.WriteLine("[{0}]: {1}", _currentinstruction, i);        
         }
 
         public override string ToString()
         {
-            return string.Format("{0} {1} {2} {3}", _name, _currentinstruction, _state, _lastOutput);
+            return string.Format("{0} {1} {2} {3} [0]: {4}", _name, _currentinstruction, _state, _lastOutput, _sourceCode[0]);
         }
     }
 }

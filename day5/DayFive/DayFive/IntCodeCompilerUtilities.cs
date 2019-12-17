@@ -25,16 +25,16 @@ namespace DayFive
             
         }
 
-        public static int DaySeven(IList<int> input)
+        public static long DaySeven(IList<long> input)
         {
-            int largest = 0;
+            long largest = 0;
             var perms = Permutations(new List<int> { 0, 1, 2, 3, 4 });
             foreach (var perm in perms)
             {
-                int output=0;
+                long output=0;
                 for (int i = 0; i < perm.Count; ++i)
                 {
-                    Queue<int> q = new Queue<int>();
+                    Queue<long> q = new Queue<long>();
                     q.Enqueue(perm[i]);
                     q.Enqueue(output);
                     var nextinput = input.Select(x => x).ToList();
@@ -50,21 +50,21 @@ namespace DayFive
 
         }
 
-        public static int DaySevenB(IList<int> sourcecode)
+        public static long DaySevenB(IList<long> sourcecode)
         {
-            int largest = 0;
-            var perms = Permutations(new List<int> { 5,6,7,8,9 });
+            long largest = 0;
+            var perms = Permutations(new List<long> { 5,6,7,8,9 });
             foreach(var perm in perms)
             {
                 var compilers = Enumerable.Range('A', 5).Select(c => new IntCodeCompiler(c.ToString(), sourcecode.Select(s => s).ToList(), false)).ToList();
-                int score = FeedbackLoop(compilers, perm);
+                long score = FeedbackLoop(compilers, perm);
                 if (score > largest)
                     largest = score;
             }
             return largest;
         }
 
-        public static int FeedbackLoop(IList<IntCodeCompiler> compilers, IList<int> perm)
+        public static long FeedbackLoop(IList<IntCodeCompiler> compilers, IList<long> perm)
         {
             int i;
             for(i = 0; i < compilers.Count; ++i)
