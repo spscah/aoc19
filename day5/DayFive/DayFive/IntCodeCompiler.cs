@@ -62,6 +62,13 @@ namespace DayFive
             _state = CompilerState.Poised;
         }
 
+        public void ResetAndCalculate()
+        {
+            _currentinstruction = 0;
+            _state = CompilerState.Poised;
+            Calculate();
+        }
+
         public long? Calculate()
         {
             if(_state != CompilerState.Poised && _state != CompilerState.Initialised)

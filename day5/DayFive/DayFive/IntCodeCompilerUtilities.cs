@@ -178,37 +178,4 @@ namespace DayFive
 
 
     }
-
-    public class CarePackage
-    {
-        IDictionary<Tuple<int, int>, GameTiles> _board;
-
-        public int CountBlockTiles => _board.Where(kvp => kvp.Value == GameTiles.Block).Count();
-        public CarePackage() {
-            _board = new Dictionary<Tuple<int, int>, GameTiles>();
-        }
-
-        public void SetUp(IntCodeCompiler d13)
-        {
-            d13.Calculate();
-
-
-            while (d13.OutputQueue.Count >= 3)
-            {
-                int x = (int)d13.OutputQueue.Dequeue();
-                int y = (int)d13.OutputQueue.Dequeue();
-                int t = (int)d13.OutputQueue.Dequeue();
-                _board.Add(new Tuple<int, int>(x, y), (GameTiles)t);
-            }
-        }
-    }
-
-    public enum GameTiles
-    {
-        Empty = 0,
-        Wall = 1,
-        Block = 2,
-        HorizontalPaddle = 3,
-        Ball = 4
-    }
 }
