@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CarePackage.cs" />
+    <Compile Include="RepairDroid.cs" />
     <Compile Include="CodeMnemonics.cs" />
     <Compile Include="GameTiles.cs" />
     <Compile Include="IntCodeCompiler.cs" />
